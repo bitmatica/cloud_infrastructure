@@ -1,50 +1,52 @@
-# Adapted from EKS template: https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-05-08/amazon-eks-vpc-private-subnets.yaml
-# Includes 2 public subnets for k8s to schedule load balancers, and 2 private subnets for worker nodes.
-
-# VpcBlock: Choose a CIDR range for your VPC.
-# Default gives 2^16=65,536 addresses
-variable "vpc_block" {
- default = "192.168.0.0/16"
+variable "region" {
+  default = "us-west-2"
 }
 
-# Specify a CIDR range for public subnet 1.
-# Default gives 2^14 = 16,384 addresses
-# We recommend that you keep the default value so that you have plenty of IP addresses for load balancers to use.
-variable "public_subnet_1_block" {
-  default = "192.168.0.0/18"
+variable "map_accounts" {
+  description = "Additional AWS account numbers to add to the aws-auth configmap."
+  type        = list(string)
+
+  default = [
+    "777777777777",
+    "888888888888",
+  ]
 }
 
-# Specify a CIDR range for public subnet 2.
-# Default gives 2^14 = 16,384 addresses
-# We recommend that you keep the default value so that you have plenty of IP addresses for load balancers to use.
-variable "public_subnet_2_block" {
-  default = "192.168.64.0/18"
+variable "map_roles" {
+  description = "Additional IAM roles to add to the aws-auth configmap."
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+
+  default = [
+    {
+      rolearn  = "arn:aws:iam::66666666666:role/role1"
+      username = "role1"
+      groups   = ["system:masters"]
+    },
+  ]
 }
 
+variable "map_users" {
+  description = "Additional IAM users to add to the aws-auth configmap."
+  type = list(object({
+    userarn  = string
+    username = string
+    groups   = list(string)
+  }))
 
-# Specify a CIDR range for private subnet 1.
-# Default gives 2^14 = 16,384 addresses
-# We recommend that you keep the default value so that you have plenty of IP addresses for pods and load balancers to use.
-variable "private_subnet_1_block" {
-  default = "192.168.128.0/18"
-}
-
-# Specify a CIDR range for private subnet 2.
-# Default gives 2^14 = 16,384 addresses
-# We recommend that you keep the default value so that you have plenty of IP addresses for pods and load balancers to use.
-variable "private_subnet_2_block" {
-  default = "192.168.192.0/18"
-}
-
-# 2 Availability zones are required by EKS
-variable "availability_zone_1" {
-  default = "us-east-1b"
-}
-
-variable "availability_zone_2" {
-  default = "us-east-1c"
-}
-
-variable "cluster_name" {
-  default = "eks_cluster"
+  default = [
+    {
+      userarn  = "arn:aws:iam::66666666666:user/user1"
+      username = "user1"
+      groups   = ["system:masters"]
+    },
+    {
+      userarn  = "arn:aws:iam::66666666666:user/user2"
+      username = "user2"
+      groups   = ["system:masters"]
+    },
+  ]
 }
