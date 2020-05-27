@@ -50,3 +50,19 @@ variable "map_users" {
     },
   ]
 }
+
+variable "app_image" {
+  default = "636934759355.dkr.ecr.us-east-1.amazonaws.com/nest-blogmatica:6983c3d879f8a15530eb78290776655a0d6e4275"
+}
+
+variable "app_name" {
+  default = "blogmatica"
+}
+
+variable "app_environment" {
+  default = "dev"
+}
+
+variable "route_53_zone_id" {
+  default = "Z3DJMBFFN2D4QM"
+}

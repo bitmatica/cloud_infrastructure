@@ -1,11 +1,5 @@
 resource "aws_security_group" "rds_security_group" {
   vpc_id = module.vpc.vpc_id
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 resource "aws_security_group_rule" "rds_ingress_from_eks" {
@@ -15,7 +9,8 @@ resource "aws_security_group_rule" "rds_ingress_from_eks" {
   security_group_id = aws_security_group.rds_security_group.id
   to_port = 5432
   type = "ingress"
-  source_security_group_id = module.eks.worker_security_group_id
+  // TODO This should be locked down to private-only security group.  Why doesn't module.eks.worker_security_group_id work?
+  source_security_group_id = module.eks.cluster_primary_security_group_id
 }
 
 module "db" {
@@ -41,17 +36,6 @@ module "db" {
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
 
-//  # Enhanced Monitoring - see example for details on how to create the role
-//  # by yourself, in case you don't want to create it automatically
-//  monitoring_interval = "30"
-//  monitoring_role_name = "MyRDSMonitoringRole"
-//  create_monitoring_role = true
-
-//  tags = {
-//    Owner       = "user"
-//    Environment = "dev"
-//  }
-
   # DB subnet group
   subnet_ids = module.vpc.private_subnets
 
@@ -63,18 +47,4 @@ module "db" {
 
   # Snapshot name upon DB deletion
   final_snapshot_identifier = "demodb"
-
-  # Database Deletion Protection
-//  deletion_protection = true
-
-//  parameters = [
-//    {
-//      name = "character_set_client"
-//      value = "utf8"
-//    },
-//    {
-//      name = "character_set_server"
-//      value = "utf8"
-//    }
-//  ]
 }

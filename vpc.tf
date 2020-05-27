@@ -1,18 +1,18 @@
+data "aws_availability_zones" "available" {
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2.6"
 
   name                 = "test-vpc"
-  cidr                 = "172.16.0.0/16"
+  cidr                 = "192.168.0.0/16"
   azs                  = data.aws_availability_zones.available.names
-  private_subnets      = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
-  public_subnets       = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
+  private_subnets      = ["192.168.0.0/18", "192.168.64.0/18"]
+  public_subnets       = ["192.168.128.0/18", "192.168.192.0/18"]
+
   enable_nat_gateway   = true
   enable_dns_hostnames = true
-
-  enable_flow_log                      = true
-  create_flow_log_cloudwatch_log_group = true
-  create_flow_log_cloudwatch_iam_role  = true
 
   public_subnet_tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
