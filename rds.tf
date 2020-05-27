@@ -1,11 +1,17 @@
 resource "aws_security_group" "rds_security_group" {
   vpc_id = module.vpc.vpc_id
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group_rule" "rds_ingress_from_eks" {
   description = "Allow worker nodes to communicate with database"
   from_port = 5432
-  protocol = "TCP"
+  protocol = "tcp"
   security_group_id = aws_security_group.rds_security_group.id
   to_port = 5432
   type = "ingress"

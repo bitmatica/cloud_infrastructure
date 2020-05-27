@@ -19,6 +19,8 @@ module "eks" {
 
   node_groups = {
     example = {
+      # desired_capacity is just the initial value and updates are ignored by this module.
+      # The preferred way to manage capacity is with k8s auto scaling.
       desired_capacity = 3
       max_capacity     = 3
       min_capacity     = 1

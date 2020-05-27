@@ -39,8 +39,8 @@ variable "map_users" {
 
   default = [
     {
-      userarn  = "arn:aws:iam::66666666666:user/user1"
-      username = "user1"
+      userarn  = "arn:aws:iam::636934759355:user/carl"
+      username = "carl"
       groups   = ["system:masters"]
     },
     {
