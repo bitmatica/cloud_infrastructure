@@ -14,7 +14,6 @@ provider "kubernetes" {
   version                = "~> 1.11.1"
 }
 
-
 resource "kubernetes_service" "service" {
   metadata {
     name = var.app_name
