@@ -7,7 +7,6 @@ module "eks" {
   # This variable is used to determine which subnets to launch worker nodes into,
   # so we only include private subnets.
   # See discussion: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/104
-  // TODO module.vpc.private_subnets
   subnets      = var.worker_node_subnets
 
   vpc_id = var.vpc_id

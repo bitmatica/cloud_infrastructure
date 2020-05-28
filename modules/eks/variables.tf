@@ -11,7 +11,6 @@ variable "cluster_name" {
 variable "worker_node_subnets" {
   description = "Subnets to launch worker nodes into"
   type = list(string)
-  // TODO module.vpc.private_subnets
 }
 
 variable "map_accounts" {

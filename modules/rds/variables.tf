@@ -6,8 +6,6 @@ variable "vpc_id" {
 variable "ingress_security_group_id" {
   description = "ID of security group to allow ingress from"
   type = string
-  // TODO This should be locked down to private-only security group.  Why doesn't module.eks.worker_security_group_id work?
-  //  source_security_group_id = module.eks.cluster_primary_security_group_id
 }
 
 variable "db_identifier" {

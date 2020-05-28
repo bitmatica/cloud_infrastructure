@@ -9,8 +9,6 @@ resource "aws_security_group_rule" "rds_ingress_from_eks" {
   security_group_id = aws_security_group.rds_security_group.id
   to_port = 5432
   type = "ingress"
-  // TODO This should be locked down to private-only security group.  Why doesn't module.eks.worker_security_group_id work?
-//  source_security_group_id = module.eks.cluster_primary_security_group_id
   source_security_group_id = var.ingress_security_group_id
 }
 
@@ -18,7 +16,7 @@ module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 2.0"
 
-  identifier = "demodb"
+  identifier = var.db_identifier
 
   engine            = "postgres"
   engine_version    = "11.6"
@@ -38,7 +36,6 @@ module "rds" {
   backup_window      = "03:00-06:00"
 
   # DB subnet group
-//  TODO subnet_ids = module.vpc.private_subnets
   subnet_ids = var.subnet_ids
 
   # DB parameter group
@@ -48,5 +45,5 @@ module "rds" {
   major_engine_version = "11"
 
   # Snapshot name upon DB deletion
-  final_snapshot_identifier = "demodb"
+  final_snapshot_identifier = var.db_identifier
 }

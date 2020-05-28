@@ -11,6 +11,5 @@ variable "subdomain" {
 
 variable "hostname" {
   description = "The domain name that you want to resolve to instead of subdomain.domain"
-  // TODO [kubernetes_service.service.load_balancer_ingress.0.hostname]
   type = string
 }

@@ -1,3 +1,8 @@
+variable "cluster_id" {
+  description = "The ID of the cluster to apply deployment config"
+  type = string
+}
+
 variable "name" {
   description = "Name of deployment"
   type = string
