@@ -1,7 +1,6 @@
 variable "name" {
   description = "Name of VPC"
   type = string
-  default = "test-vpc"
 }
 
 variable "cluster_name" {

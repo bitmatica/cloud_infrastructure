@@ -12,6 +12,8 @@ module "eks" {
 
   vpc_id = var.vpc_id
 
+  write_kubeconfig = false
+
   node_groups = {
     main = {
       # desired_capacity is just the initial value and updates are ignored by this module.
