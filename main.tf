@@ -1,19 +1,25 @@
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
+terraform {
+  required_version = ">= 0.12.6"
 }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
+provider "aws" {
+  version = ">= 2.28.1"
+  region  = var.region
 }
 
-data "aws_availability_zones" "available" {
+provider "random" {
+  version = "~> 2.1"
 }
 
-locals {
-  cluster_name = "test-eks-${random_string.suffix.result}"
+provider "local" {
+  version = "~> 1.2"
 }
 
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
+provider "null" {
+  version = "~> 2.1"
+}
+
+# PROJECTS
+module "blogmatica" {
+  source = "./blogmatica"
 }
