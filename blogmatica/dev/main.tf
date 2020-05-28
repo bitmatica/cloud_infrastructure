@@ -4,16 +4,16 @@ resource "random_string" "suffix" {
 }
 
 locals {
-  env_key = "${var.name}-${var.environment}"
+  project_name = "${var.name}-${var.environment}"
 }
 
 locals {
-  cluster_name = "${local.env_key}-eks-${random_string.suffix.result}"
+  cluster_name = "${local.project_name}-eks-${random_string.suffix.result}"
 }
 
 module "network" {
   source = "../../modules/vpc"
-  name = "${local.env_key}-vpc"
+  name = "${local.project_name}-vpc"
   cluster_name = local.cluster_name
 }
 
@@ -57,5 +57,5 @@ module "deployment" {
   db_password = module.database.this_db_instance_password
   db_port = module.database.this_db_instance_port
   db_username = module.database.this_db_instance_username
-  image = "636934759355.dkr.ecr.us-east-1.amazonaws.com/nest-blogmatica:6983c3d879f8a15530eb78290776655a0d6e4275"
+  image = local.image
 }
