@@ -96,7 +96,7 @@ provider "kubernetes" {
 }
 
 resource "kubernetes_service" "service" {
-  depends_on = [module.eks.node_groups]
+  depends_on = [module.eks.config_map_aws_auth]
   metadata {
     name = "blogmatica"
   }
@@ -113,6 +113,7 @@ resource "kubernetes_service" "service" {
 }
 
 resource "kubernetes_deployment" "deployment" {
+  depends_on = [module.eks.config_map_aws_auth]
   metadata {
     name = "blogmatica"
     labels = {
