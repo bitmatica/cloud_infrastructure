@@ -19,7 +19,6 @@ provider "null" {
   version = "~> 2.1"
 }
 
-# PROJECTS
-module "blogmatica" {
-  source = "./blogmatica"
+module "shared-dev" {
+  source = "./shared-dev"
 }

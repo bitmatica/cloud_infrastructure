@@ -1,3 +1,8 @@
+output "cluster_id" {
+  description = "ID of created cluster"
+  value       = module.eks.cluster_id
+}
+
 output "cluster_endpoint" {
   description = "Endpoint for EKS control plane."
   value       = module.eks.cluster_endpoint
@@ -6,6 +11,12 @@ output "cluster_endpoint" {
 output "cluster_security_group_id" {
   description = "Security group ids attached to the cluster control plane."
   value       = module.eks.cluster_security_group_id
+}
+
+output "cluster_worker_nodes_security_group_id" {
+  description = "Security group ids attached to the worker nodes."
+  // TODO This should be locked down to private-only security group.  Why doesn't module.eks.worker_security_group_id work?
+  value       = module.eks.cluster_primary_security_group_id
 }
 
 output "kubectl_config" {
