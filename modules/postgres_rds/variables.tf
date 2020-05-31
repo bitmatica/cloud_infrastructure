@@ -29,6 +29,12 @@ variable "ingress_security_group_id" {
   type        = string
 }
 
+variable "ingress_security_group_description" {
+  description = "A security group to allow ingress from"
+  type        = string
+  default     = "Allow EKS worker nodes to communicate with database"
+}
+
 variable "port" {
   description = "The port on which the DB accepts connections"
   type        = string
@@ -44,4 +50,10 @@ variable "engine_version" {
   description = "Version of postgres engine"
   type        = string
   default = "11.6"
+}
+
+variable "instance_class" {
+  description = "The instance type of the RDS instance"
+  type        = string
+  default = "db.t2.micro"
 }

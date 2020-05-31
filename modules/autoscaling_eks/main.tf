@@ -38,7 +38,8 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
-# Including the provider here ensures this module isn't finished creating until the cluster auth has been applied
+# This is required since manage_aws_auth = true
+# The eks module needs cluster auth to add aws roles/users/accounts
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)

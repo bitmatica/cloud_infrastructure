@@ -33,3 +33,11 @@ output "node_groups" {
   description = "Outputs from node groups"
   value       = module.eks.node_groups
 }
+
+output "cluster_ca_certificate" {
+  value = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+}
+
+output "cluster_token" {
+  value = data.aws_eks_cluster_auth.cluster.token
+}

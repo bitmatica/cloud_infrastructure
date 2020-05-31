@@ -18,7 +18,7 @@ module "rds" {
 
   engine            = "postgres"
   engine_version    = var.engine_version
-  instance_class    = "db.t2.micro"
+  instance_class    = var.instance_class
   allocated_storage = 5
 
   identifier = var.identifier

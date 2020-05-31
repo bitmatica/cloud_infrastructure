@@ -14,6 +14,7 @@ module "vpc" {
   enable_nat_gateway   = true
   enable_dns_hostnames = true
 
+  # See https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html#vpc-subnet-tagging
   public_subnet_tags = {
     // Required so k8s can discover the subnet
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"

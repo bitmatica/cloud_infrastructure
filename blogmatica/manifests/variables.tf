@@ -1,10 +1,5 @@
 variable "name" {
-  description = "Name of the app.  Used in subdomain generation."
-  type = string
-}
-
-variable "environment" {
-  description = "Environment of the app, such as staging.  Used in subdomain generation."
+  description = "Name of the app"
   type = string
 }
 
@@ -19,18 +14,6 @@ variable "replicas" {
   default = 1
 }
 
-variable "domain" {
-  description = "Domain already im public hosted zone.  A record set will be created to resolve subdomain.domain to hostname"
-  type = string
-  default = "bitmatica.com."
-}
-
-variable "cluster_id" {
-  description = "EKS cluster ID to deploy to"
-  type = any
-}
-
-// TODO Figure out how to accept multiple env blocks like k8s deployment resource does
 variable "db_host" {
   description = "The host of the RDS instance"
   type        = string
@@ -54,4 +37,10 @@ variable "db_password" {
 variable "db_port" {
   description = "The port on which the DB accepts connections"
   type        = string
+}
+
+variable "creation_depends_on" {
+  description = "A hack since terraform modules don't currently support depends_on semantics.  Anything passed here will be required for initial manifest resource creation"
+  type = any
+  default = null
 }
