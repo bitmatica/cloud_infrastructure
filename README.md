@@ -9,7 +9,9 @@ This repo is meant to bootstrap AWS infrastructure, including the following:
 
 TODO:
 * KMS/secret management
-* Github repo
+* CloudFront
+* S3
+* SNS/SQS
 * etc
 
 After installing the AWS CLI. Configure it to use your credentials.
