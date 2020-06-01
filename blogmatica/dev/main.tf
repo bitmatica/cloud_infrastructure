@@ -1,12 +1,16 @@
+locals {
+  cluster_name = "${var.name}-${var.environment}"
+}
+
 module "network" {
   source = "../../modules/eks_vpc"
   name = var.name
-  cluster_name = var.name
+  cluster_name = local.cluster_name
 }
 
 module "cluster" {
   source = "../../modules/autoscaling_eks"
-  cluster_name = var.name
+  cluster_name = local.cluster_name
   vpc_id = module.network.vpc_id
   worker_node_subnet_ids = module.network.private_subnets
 }

@@ -1,5 +1,11 @@
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+  upper = false
+}
+
 locals {
-  name = "blogmatica"
+  name = "blogmatica-${random_string.suffix.result}"
 }
 
 resource "aws_ecr_repository" "repository" {
