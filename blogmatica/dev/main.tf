@@ -1,23 +1,23 @@
 locals {
-  cluster_name = "${var.name}-${var.environment}"
+  project_name = "${var.name}-${var.environment}"
 }
 
 module "network" {
   source = "../../modules/eks_vpc"
   name = var.name
-  cluster_name = local.cluster_name
+  cluster_name = local.project_name
 }
 
 module "cluster" {
   source = "../../modules/autoscaling_eks"
-  cluster_name = local.cluster_name
+  cluster_name = local.project_name
   vpc_id = module.network.vpc_id
   worker_node_subnet_ids = module.network.private_subnets
 }
 
 module "db_instance" {
   source = "../../modules/postgres_rds"
-  identifier = var.name
+  identifier = local.project_name
   ingress_security_group_id = module.cluster.cluster_worker_nodes_security_group_id
   // TODO don't store these in code
   name = "demodb"
