@@ -19,6 +19,7 @@ module "db_instance" {
   source = "../../modules/postgres_rds"
   identifier = var.name
   ingress_security_group_id = module.cluster.cluster_worker_nodes_security_group_id
+  // TODO don't store these in code
   name = "demodb"
   username = "demouser"
   password = "demopassword"
