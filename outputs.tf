@@ -24,9 +24,9 @@ output "blogmatica_dev_cluster_endpoint" {
   value       = module.blogmatica.dev_cluster_endpoint
 }
 
-output "blogmatica_dev_db_instance_name" {
-  description = "The database name"
-  value       = module.blogmatica.dev_db_instance_name
+output "blogmatica_dev_db_instance_id" {
+  description = "ID of the db instance"
+  value       = module.blogmatica.dev_db_instance_id
 }
 
 output "blogmatica_dev_app_hostname" {

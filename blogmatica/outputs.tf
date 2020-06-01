@@ -23,9 +23,9 @@ output "dev_cluster_endpoint" {
   value       = module.dev.cluster_endpoint
 }
 
-output "dev_db_instance_name" {
-  description = "The database name"
-  value       = module.dev.db_instance_name
+output "dev_db_instance_id" {
+  description = "ID of the db instance"
+  value       = module.dev.db_instance_id
 }
 
 output "dev_app_hostname" {

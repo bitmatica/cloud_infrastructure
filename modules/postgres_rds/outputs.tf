@@ -1,3 +1,8 @@
+output "this_db_instance_id" {
+  description = "The RDS instance ID"
+  value       = module.rds.this_db_instance_id
+}
+
 output "db_instance_name" {
   description = "The database name"
   value       = module.rds.this_db_instance_name
@@ -28,3 +33,4 @@ output "db_instance_engine_version" {
   description = "The engine version of the RDS instance"
   value       = var.engine_version
 }
+
