@@ -56,5 +56,5 @@ module "app" {
 module "subdomain" {
   source = "../../modules/route53_subdomain"
   hostname = module.app.service_host
-  subdomain = "${var.name}.${var.environment}"
+  subdomain = local.project_name
 }

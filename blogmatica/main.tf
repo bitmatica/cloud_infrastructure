@@ -8,11 +8,6 @@ locals {
   name = "blogmatica-${random_string.suffix.result}"
 }
 
-data "aws_ecr_image" "latest_image" {
-  repository_name = aws_ecr_repository.repository.name
-  image_tag = "latest"
-}
-
 resource "aws_ecr_repository" "repository" {
   name = local.name
   image_tag_mutability = "IMMUTABLE"
