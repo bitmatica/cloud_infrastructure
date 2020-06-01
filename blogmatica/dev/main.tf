@@ -4,7 +4,7 @@ locals {
 
 module "network" {
   source = "../../modules/eks_vpc"
-  name = var.name
+  name = local.project_name
   cluster_name = local.project_name
 }
 
