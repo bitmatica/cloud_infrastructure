@@ -33,3 +33,8 @@ output "blogmatica_dev_app_hostname" {
   description = "Hostname of kubernetes app"
   value = module.blogmatica.dev_app_hostname
 }
+
+output "region" {
+  description = "AWS region"
+  value = local.region
+}

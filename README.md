@@ -85,6 +85,7 @@ blogmatica_dev_public_subnets = [
   "subnet-062543dadba68009b",
 ]
 blogmatica_dev_vpc_id = vpc-0a9ef1b6fd8375aef
+region = us-west-2
 ```
 
 ## Configure kubectl
