@@ -17,4 +17,5 @@ module "dev" {
   source = "./dev"
   environment = "dev"
   name = local.name
+  region = var.region
 }

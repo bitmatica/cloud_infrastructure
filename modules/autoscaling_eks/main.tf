@@ -47,3 +47,66 @@ provider "kubernetes" {
   load_config_file       = false
   version                = "~> 1.11.1"
 }
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+  debug = true
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "helm_release" "cluster_autoscaler" {
+  // Hack to ensure cluster is up and running
+  depends_on = [module.eks.config_map_aws_auth]
+
+  chart = "stable/cluster-autoscaler"
+  name =  "cluster-autoscaler"
+  namespace  = "kube-system"
+  create_namespace = true
+  repository = "stable"
+  version    = "7.1.0"
+
+  set {
+    name  = "autoDiscovery.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "autoDiscovery.clusterName"
+    value = var.cluster_name
+  }
+
+  set {
+    name = "rbac.create"
+    value = "true"
+  }
+
+//  set {
+//    name =  "rbac.serviceAccount.create"
+//    value = "true"
+//  }
+
+  set {
+    name = "rbac.serviceAccountAnnotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.iam_assumable_role_admin.this_iam_role_arn
+  }
+
+  set {
+    name = "awsRegion"
+    value = var.region
+  }
+
+  set {
+    name  = "cloudProvider"
+    value = "aws"
+  }
+//
+//  set {
+//    name  = "sslCertPath"
+//    value = "/etc/ssl/certs/ca-bundle.crt"
+//  }
+}

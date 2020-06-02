@@ -25,4 +25,5 @@ provider "null" {
 
 module "blogmatica" {
   source = "./blogmatica"
+  region = local.region
 }
