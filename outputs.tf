@@ -34,6 +34,11 @@ output "blogmatica_dev_app_hostname" {
   value = module.blogmatica.dev_app_hostname
 }
 
+output "blogmatica_dev_frontend_hostname" {
+  description = "Hostname of frontend app"
+  value = module.blogmatica.dev_frontend_hostname
+}
+
 output "region" {
   description = "AWS region"
   value = local.region

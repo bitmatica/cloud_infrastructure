@@ -1,5 +1,6 @@
 locals {
-  project_name = "${var.name}-${var.environment}"
+  project_name = "${var.environment}-${var.name}"
+  api_uri = "api.${local.project_name}"
 }
 
 module "network" {
@@ -44,17 +45,32 @@ module "app" {
   db_port = module.db_instance.db_instance_port
   db_username = module.db_instance.db_instance_username
   name = var.name
-  image = local.image
+  image = local.backend_image
   providers = {
     // Ensure cluster for this environment is used
     kubernetes = kubernetes.blogmaticadev
   }
   // Hack to ensure cluster is ready before creating k8s resources
   creation_depends_on = module.cluster.config_map_aws_auth
+  acm_certificate_arn = module.backend_cert.acm_certificate_arn
 }
 
 module "subdomain" {
   source = "../../modules/route53_subdomain"
   hostname = module.app.service_host
-  subdomain = local.project_name
+  subdomain = local.api_uri
+}
+
+module "backend_cert" {
+  source = "../../modules/acm_certificate"
+  domain_name = "${local.api_uri}.bitmatica.com"
+  public_hosted_zone_domain_name = "bitmatica.com."
+}
+
+module "frontend" {
+  source = "../../modules/s3_static_site"
+  name =  local.project_name
+  domain_name = "${local.project_name}.bitmatica.com"
+  public_hosted_zone_domain_name = "bitmatica.com."
+  frontend_version = local.frontend_version
 }

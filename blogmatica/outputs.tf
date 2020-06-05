@@ -32,3 +32,8 @@ output "dev_app_hostname" {
   description = "Hostname of kubernetes app"
   value = module.dev.app_hostname
 }
+
+output "dev_frontend_hostname" {
+  description = "Hostname of frontend app"
+  value = module.dev.frontend_hostname
+}
