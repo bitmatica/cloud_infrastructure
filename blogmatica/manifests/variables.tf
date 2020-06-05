@@ -44,3 +44,8 @@ variable "creation_depends_on" {
   type = any
   default = null
 }
+
+variable "acm_certificate_arn" {
+  description = "ARN of ACM certificate to associate with LoadBalancer service"
+  type = string
+}

@@ -6,13 +6,21 @@ resource "kubernetes_service" "service" {
   # BEGIN SERVICE CONFIG
   metadata {
     name = var.name
+    annotations = {
+      # Note that the backend talks over HTTP.
+      "service.beta.kubernetes.io/aws-load-balancer-backend-protocol": "http"
+      "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": var.acm_certificate_arn
+      # Only run SSL on the port named "https" below.
+      "service.beta.kubernetes.io/aws-load-balancer-ssl-ports": "https"
+    }
   }
   spec {
     selector = {
       app = var.name
     }
     port {
-      port = 80
+      name = "https"
+      port = 443
       target_port = 3000
     }
     type = "LoadBalancer"
