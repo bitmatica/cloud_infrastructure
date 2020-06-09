@@ -33,4 +33,3 @@ output "db_instance_engine_version" {
   description = "The engine version of the RDS instance"
   value       = var.engine_version
 }
-

@@ -87,9 +87,17 @@ resource "kubernetes_deployment" "deployment" {
             name = "DATABASE_MIGRATIONS"
             value = "true"
           }
+          env {
+            name = "KMS_KEY_ARN"
+            value = aws_kms_key.kms_key.arn
+          }
           image_pull_policy = "Always"
         }
       }
     }
   }
+}
+
+resource "aws_kms_key" "kms_key" {
+  description = "KMS key used to generate, encrypt and decrypt data keys"
 }
