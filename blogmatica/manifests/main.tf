@@ -98,6 +98,7 @@ resource "kubernetes_deployment" "deployment" {
   }
 }
 
+// TODO add a policy that restricts usage of this key to the pod that needs it via IRSA
 resource "aws_kms_key" "kms_key" {
   description = "KMS key used to generate, encrypt and decrypt data keys"
 }
