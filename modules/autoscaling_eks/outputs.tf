@@ -41,3 +41,8 @@ output "cluster_ca_certificate" {
 output "cluster_token" {
   value = data.aws_eks_cluster_auth.cluster.token
 }
+
+output "cluster_oidc_issuer_url" {
+  description = "The URL on the EKS cluster OIDC Issuer"
+  value       = module.eks.cluster_oidc_issuer_url
+}

@@ -3,6 +3,21 @@ locals {
   api_uri = "api.${local.project_name}"
 }
 
+resource "random_string" "db_name" {
+  length = 16
+  special = false
+}
+
+resource "random_string" "db_username" {
+  length = 16
+  special = false
+}
+
+resource "random_password" "db_password" {
+  length = 16
+  special = false
+}
+
 module "network" {
   source = "../../modules/eks_vpc"
   name = local.project_name
@@ -20,10 +35,9 @@ module "db_instance" {
   source = "../../modules/postgres_rds"
   identifier = local.project_name
   ingress_security_group_id = module.cluster.cluster_worker_nodes_security_group_id
-  // TODO don't store these in code
-  name = "demodb"
-  username = "demouser"
-  password = "demopassword"
+  name = random_string.db_name.result
+  username = random_string.db_username.result
+  password = random_password.db_password.result
   vpc_id = module.network.vpc_id
   subnet_ids = module.network.private_subnets
 }
@@ -53,6 +67,11 @@ module "app" {
   // Hack to ensure cluster is ready before creating k8s resources
   creation_depends_on = module.cluster.config_map_aws_auth
   acm_certificate_arn = module.backend_cert.acm_certificate_arn
+  plaid_client_id = var.plaid_client_id
+  plaid_env = var.plaid_env
+  plaid_public_key = var.plaid_public_key
+  plaid_secret = var.plaid_secret
+  cluster_oidc_issuer_url = module.cluster.cluster_oidc_issuer_url
 }
 
 module "subdomain" {
