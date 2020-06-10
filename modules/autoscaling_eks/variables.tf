@@ -22,10 +22,7 @@ variable "instance_type" {
 variable "map_accounts" {
   description = "Additional AWS account numbers to add to the aws-auth configmap."
   type        = list(string)
-  default = [
-    "777777777777",
-    "888888888888",
-  ]
+  default = []
 }
 
 variable "map_roles" {
@@ -35,13 +32,7 @@ variable "map_roles" {
     username = string
     groups   = list(string)
   }))
-  default = [
-    {
-      rolearn  = "arn:aws:iam::66666666666:role/role1"
-      username = "role1"
-      groups   = ["system:masters"]
-    },
-  ]
+  default = []
 }
 
 variable "map_users" {
@@ -51,16 +42,5 @@ variable "map_users" {
     username = string
     groups   = list(string)
   }))
-  default = [
-    {
-      userarn  = "arn:aws:iam::555555555555:user/user1"
-      username = "user1"
-      groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::66666666666:user/user2"
-      username = "user2"
-      groups   = ["system:masters"]
-    },
-  ]
+  default = []
 }

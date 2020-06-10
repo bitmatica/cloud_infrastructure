@@ -17,4 +17,8 @@ module "dev" {
   source = "./dev"
   environment = "dev"
   name = local.name
+  plaid_client_id = var.plaid_client_id
+  plaid_env = var.plaid_env
+  plaid_public_key = var.plaid_public_key
+  plaid_secret = var.plaid_secret
 }

@@ -13,6 +13,8 @@ module "eks" {
 
   write_kubeconfig = false
 
+  enable_irsa  = true
+
   node_groups = {
     main = {
       # desired_capacity is just the initial value and updates are ignored by this module.

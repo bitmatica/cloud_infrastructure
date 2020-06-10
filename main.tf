@@ -4,6 +4,11 @@ locals {
 
 terraform {
   required_version = ">= 0.12.6"
+  backend "s3" {
+    bucket = "blogmatica-terraform"
+    key    = "blogmatica"
+    region = "us-west-2"
+  }
 }
 
 provider "aws" {
@@ -25,4 +30,8 @@ provider "null" {
 
 module "blogmatica" {
   source = "./blogmatica"
+  plaid_client_id = var.dev_plaid_client_id
+  plaid_env = var.dev_plaid_env
+  plaid_public_key = var.dev_plaid_public_key
+  plaid_secret = var.dev_plaid_secret
 }
