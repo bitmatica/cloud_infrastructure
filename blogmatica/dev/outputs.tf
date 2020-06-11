@@ -37,3 +37,8 @@ output "frontend_hostname" {
   description = "Hostname of frontend app"
   value = module.frontend.hostname
 }
+
+output "frontend_s3_bucket_name" {
+  description = "Name of s3 bucket that CloudFront points to"
+  value = module.frontend.s3_bucket_name
+}

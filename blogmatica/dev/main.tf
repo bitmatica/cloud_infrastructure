@@ -83,13 +83,13 @@ module "subdomain" {
 module "backend_cert" {
   source = "../../modules/acm_certificate"
   domain_name = "${local.api_uri}.bitmatica.com"
-  public_hosted_zone_domain_name = "bitmatica.com."
+  public_hosted_zone_domain_name = "bitmatica.com"
 }
 
 module "frontend" {
   source = "../../modules/s3_static_site"
   name =  local.project_name
   domain_name = "${local.project_name}.bitmatica.com"
-  public_hosted_zone_domain_name = "bitmatica.com."
+  public_hosted_zone_domain_name = "bitmatica.com"
   frontend_version = local.frontend_version
 }

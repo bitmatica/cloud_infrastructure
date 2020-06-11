@@ -17,3 +17,8 @@ variable "plaid_env" {
   description = "Plaid Env"
   type = string
 }
+
+variable "aws_region" {
+  description = "AWS region"
+  type = string
+}

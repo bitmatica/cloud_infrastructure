@@ -72,7 +72,7 @@ Do you want to perform these actions?
 
 Outputs:
 
-blogmatica_dev_app_hostname = blogmatica-zbq5x90t.dev.bitmatica.com.
+blogmatica_dev_app_hostname = blogmatica-zbq5x90t.dev.bitmatica.com
 blogmatica_dev_cluster_endpoint = https://00F81E73B092E618A9CEE372D42DE26D.gr7.us-west-2.eks.amazonaws.com
 blogmatica_dev_cluster_id = blogmatica-zbq5x90t-dev
 blogmatica_dev_db_instance_name = demodb

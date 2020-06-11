@@ -16,6 +16,11 @@ provider "aws" {
   region  = local.region
 }
 
+provider "github" {
+  token        = var.github_token
+  organization = var.github_organization
+}
+
 provider "random" {
   version = "~> 2.1"
 }
@@ -34,4 +39,5 @@ module "blogmatica" {
   plaid_env = var.dev_plaid_env
   plaid_public_key = var.dev_plaid_public_key
   plaid_secret = var.dev_plaid_secret
+  aws_region = local.region
 }

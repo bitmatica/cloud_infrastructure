@@ -11,7 +11,7 @@ variable "domain_name" {
 variable "public_hosted_zone_domain_name" {
   description = "Domain name of existing public hosted zone"
   type = string
-  default = "bitmatica.com."
+  default = "bitmatica.com"
 }
 
 variable "frontend_version" {
