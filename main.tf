@@ -6,7 +6,7 @@ terraform {
   required_version = ">= 0.12.6"
   backend "s3" {
     bucket = "blogmatica-terraform"
-    key    = "blogmatica"
+    key    = "blogmatica/state"
     region = "us-west-2"
   }
 }
