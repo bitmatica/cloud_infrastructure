@@ -27,6 +27,30 @@ resource "kubernetes_service" "service" {
   }
 }
 
+resource "kubernetes_secret" "secret" {
+  # This is a hack to ensure the cluster is ready and auth has been applied before initial apply
+  # Can be removed when Terraform adds support for module's `depends_on`https://github.com/hashicorp/terraform/issues/10462
+  depends_on = [var.creation_depends_on]
+
+  metadata {
+    name = "${var.name}-secrets"
+  }
+
+  data = {
+    DATABASE_HOST = var.db_host
+    DATABASE_PORT = var.db_port
+    DATABASE_USER = var.db_username
+    DATABASE_PASS = var.db_password
+    DATABASE_DB = var.db_name
+    DATABASE_MIGRATIONS = "true"
+    KMS_KEY_ARN = aws_kms_key.kms_key.arn
+    PLAID_CLIENT_ID = var.plaid_client_id
+    PLAID_SECRET = var.plaid_secret
+    PLAID_PUBLIC_KEY = var.plaid_public_key
+    PLAID_ENV = var.plaid_env
+  }
+}
+
 resource "kubernetes_deployment" "deployment" {
   # This is a hack to ensure the cluster is ready and auth has been applied before initial apply
   # Can be removed when Terraform adds support for module's `depends_on`https://github.com/hashicorp/terraform/issues/10462
@@ -65,49 +89,10 @@ resource "kubernetes_deployment" "deployment" {
             container_port = 3000
           }
 
-          env {
-            name = "DATABASE_HOST"
-            value = var.db_host
-          }
-          env {
-            name = "DATABASE_PORT"
-            value = var.db_port
-          }
-          env {
-            name = "DATABASE_USER"
-            value = var.db_username
-          }
-          env {
-            name = "DATABASE_PASS"
-            value = var.db_password
-          }
-          env {
-            name = "DATABASE_DB"
-            value = var.db_name
-          }
-          env {
-            name = "DATABASE_MIGRATIONS"
-            value = "true"
-          }
-          env {
-            name = "KMS_KEY_ARN"
-            value = aws_kms_key.kms_key.arn
-          }
-          env {
-            name = "PLAID_CLIENT_ID"
-            value = var.plaid_client_id
-          }
-          env {
-            name = "PLAID_SECRET"
-            value = var.plaid_secret
-          }
-          env {
-            name = "PLAID_PUBLIC_KEY"
-            value = var.plaid_public_key
-          }
-          env {
-            name = "PLAID_ENV"
-            value = var.plaid_env
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.secret.metadata[0].name
+            }
           }
           image_pull_policy = "Always"
         }
