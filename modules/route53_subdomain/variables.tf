@@ -1,7 +1,7 @@
 variable "domain" {
   description = "Domain of already existing public hosted zone in route53"
   type = string
-  default = "bitmatica.com."
+  default = "bitmatica.com"
 }
 
 variable "subdomain" {
