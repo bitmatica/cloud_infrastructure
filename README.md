@@ -7,11 +7,10 @@ This repo is meant to bootstrap AWS infrastructure, including the following:
 * ECR
 * Route53 subdomain
 * Kubernetes deployments
+* Frontend hosting/deployments via S3/CloudFront
+* KMS/secret management
 
 TODO:
-* KMS/secret management
-* CloudFront
-* S3
 * SNS/SQS
 * SES
 * etc

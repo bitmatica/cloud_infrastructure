@@ -1,4 +1,4 @@
 locals {
-  backend_image = "636934759355.dkr.ecr.us-west-2.amazonaws.com/blogmatica-f14alt4m:9068e4384ca21b7277c5fe5dd54a928caeb6951e"
+  backend_image = "636934759355.dkr.ecr.us-west-2.amazonaws.com/blogmatica:c9dfc5aa7c1f8714a57859c45299d9848788c8c7"
   frontend_version = "v0.1.0"
 }

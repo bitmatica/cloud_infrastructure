@@ -57,7 +57,7 @@ resource "kubernetes_deployment" "deployment" {
   depends_on = [var.creation_depends_on]
 
   timeouts {
-    create = "1m"
+    create = "5m"
   }
 
   # BEGIN DEPLOYMENT CONFIG

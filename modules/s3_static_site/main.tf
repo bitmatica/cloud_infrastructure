@@ -46,21 +46,21 @@ resource "aws_acm_certificate_validation" "cert" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.name
+  bucket = var.bucket_name
   # Bucket is not publicly accessible - CloudFront is given access via origin access identity
   acl    = "private"
 
   tags = {
-    Name = var.name
+    Name = var.bucket_name
   }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = var.name
+  comment = var.bucket_name
 }
 
 locals {
-  s3_origin_id = var.name
+  s3_origin_id = var.bucket_name
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
@@ -74,7 +74,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = var.name
+  comment             = var.bucket_name
   default_root_object = "${var.frontend_version}/index.html"
   custom_error_response {
     error_code = 404
@@ -84,7 +84,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${var.name}.s3.amazonaws.com"
+    bucket          = "${var.bucket_name}.s3.amazonaws.com"
     prefix          = "cloudfront_logs"
   }
 
@@ -165,7 +165,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   tags = {
-    Environment = var.name
+    Environment = var.bucket_name
   }
 
   viewer_certificate {
