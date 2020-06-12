@@ -8,7 +8,7 @@ terraform {
   required_version = ">= 0.12.6"
   backend "s3" {
     bucket = "bitmatica-terraform"
-    key    = "blogmatica/shared/terraform.tfstate"
+    key    = "blogmatica/github/terraform.tfstate"
     region = "us-west-2" // No variables allowed here :(
     dynamodb_table = "bitmatica-terraform-locks"
     encrypt        = true
