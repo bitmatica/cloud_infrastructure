@@ -51,8 +51,8 @@ provider "kubernetes" {
   version                = "~> 1.11.1"
 }
 
-module "app" {
-  source = "../manifests"
+module "backend" {
+  source = "../../modules/k8s_backend_service"
   db_host = module.db_instance.db_instance_address
   db_name = module.db_instance.db_instance_name
   db_password = module.db_instance.db_instance_password
@@ -76,7 +76,7 @@ module "app" {
 
 module "subdomain" {
   source = "../../modules/route53_subdomain"
-  hostname = module.app.service_host
+  hostname = module.backend.service_host
   subdomain = local.api_uri
 }
 

@@ -5,9 +5,11 @@ locals {
 terraform {
   required_version = ">= 0.12.6"
   backend "s3" {
-    bucket = "blogmatica-terraform"
+    bucket = "bitmatica-terraform"
     key    = "blogmatica/state"
     region = "us-west-2"
+    dynamodb_table = "bitmatica-terraform-locks"
+    encrypt        = true
   }
 }
 
