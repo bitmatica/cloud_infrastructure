@@ -1,5 +1,5 @@
-variable "name" {
-  description = "Name of static site"
+variable "bucket_name" {
+  description = "Name of S3 bucket that will be created"
   type = string
 }
 

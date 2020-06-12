@@ -1,6 +1,43 @@
 locals {
-  project_name = "${var.environment}-${var.name}"
+  region = "us-west-2"
+  name = "blogmatica-${random_string.suffix.result}"
+  environment = "dev"
+  project_name = "${local.environment}-${local.name}"
   api_uri = "api.${local.project_name}"
+}
+
+terraform {
+  required_version = ">= 0.12.6"
+  backend "s3" {
+    bucket = "bitmatica-terraform"
+    key    = "blogmatica/dev/terraform.tfstate"
+    region = "us-west-2"
+    dynamodb_table = "bitmatica-terraform-locks"
+    encrypt        = true
+  }
+}
+
+provider "aws" {
+  version = ">= 2.28.1"
+  region  = local.region
+}
+
+provider "random" {
+  version = "~> 2.1"
+}
+
+provider "local" {
+  version = "~> 1.2"
+}
+
+provider "null" {
+  version = "~> 2.1"
+}
+
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+  upper = false
 }
 
 resource "random_string" "db_name" {
@@ -11,6 +48,7 @@ resource "random_string" "db_name" {
 resource "random_string" "db_username" {
   length = 16
   special = false
+  number = false
 }
 
 resource "random_password" "db_password" {
@@ -51,14 +89,14 @@ provider "kubernetes" {
   version                = "~> 1.11.1"
 }
 
-module "app" {
-  source = "../manifests"
+module "backend" {
+  source = "../../modules/k8s_backend_service"
   db_host = module.db_instance.db_instance_address
   db_name = module.db_instance.db_instance_name
   db_password = module.db_instance.db_instance_password
   db_port = module.db_instance.db_instance_port
   db_username = module.db_instance.db_instance_username
-  name = var.name
+  name = local.name
   image = local.backend_image
   providers = {
     // Ensure cluster for this environment is used
@@ -76,7 +114,7 @@ module "app" {
 
 module "subdomain" {
   source = "../../modules/route53_subdomain"
-  hostname = module.app.service_host
+  hostname = module.backend.service_host
   subdomain = local.api_uri
 }
 
@@ -88,7 +126,7 @@ module "backend_cert" {
 
 module "frontend" {
   source = "../../modules/s3_static_site"
-  name =  local.project_name
+  bucket_name =  "${local.project_name}-frontend"
   domain_name = "${local.project_name}.bitmatica.com"
   public_hosted_zone_domain_name = "bitmatica.com"
   frontend_version = local.frontend_version

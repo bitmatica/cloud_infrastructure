@@ -56,6 +56,10 @@ resource "kubernetes_deployment" "deployment" {
   # Can be removed when Terraform adds support for module's `depends_on`https://github.com/hashicorp/terraform/issues/10462
   depends_on = [var.creation_depends_on]
 
+  timeouts {
+    create = "5m"
+  }
+
   # BEGIN DEPLOYMENT CONFIG
   metadata {
     name = var.name
