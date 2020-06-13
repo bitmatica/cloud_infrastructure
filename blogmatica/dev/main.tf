@@ -67,6 +67,13 @@ module "cluster" {
   cluster_name = local.project_name
   vpc_id = module.network.vpc_id
   worker_node_subnet_ids = module.network.private_subnets
+  map_users = [
+    {
+      userarn  = "arn:aws:iam::636934759355:user/github-actions-terraform"
+      username = "github-actions-terraform"
+      groups   = ["system:masters"]
+    },
+  ]
 }
 
 module "db_instance" {

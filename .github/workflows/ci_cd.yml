@@ -27,16 +27,10 @@ jobs:
           terraform_version: 0.12.25
 
       - name: Terraform Init
-        run: |
-        cd blogmatica/dev
-        terraform init
-        env $(aws s3 cp $(cat secrets_path.txt) - | cat | xargs) terraform plan
-#
-#      - name: Terraform Format
-#        run: cd blogmatica/dev && terraform fmt -check
+        run: cd blogmatica/dev && terraform init
 
-#      - name: Terraform Plan
-#        run: cd blogmatica/dev && env $(aws s3 cp $(cat secrets_path.txt) - | cat | xargs) terraform plan
+      - name: Terraform Plan
+        run: cd blogmatica/dev && env $(aws s3 cp $(cat secrets_path.txt) - | cat | xargs) terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
