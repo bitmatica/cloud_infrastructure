@@ -1,1 +1,1 @@
-636934759355.dkr.ecr.us-west-2.amazonaws.com/blogmatica:8a1f06fd24374b6edb1cc9b3e862d1ff3445048e
+636934759355.dkr.ecr.us-west-2.amazonaws.com/blogmatica:3fb45879b9539110b17bcf409fad5201189ad04f
