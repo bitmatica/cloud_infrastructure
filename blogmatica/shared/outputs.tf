@@ -13,3 +13,7 @@ output "app_name" {
 output "aws_region" {
   value = local.region
 }
+
+output "dev_secrets_name" {
+  value = local.dev_secrets_name
+}

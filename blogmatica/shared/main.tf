@@ -1,6 +1,7 @@
 locals {
   app_name = "blogmatica"
   dev_frontend_bucket_name = "${local.app_name}-dev-frontend"
+  dev_secrets_name = "${local.app_name}-dev"
   region = "us-west-2"
 }
 
@@ -39,4 +40,8 @@ resource "aws_s3_bucket" "dev_bucket" {
     # These are updated by s3_static_site module, ignore changes
     ignore_changes = [grant]
   }
+}
+
+resource "aws_secretsmanager_secret" "dev_secrets" {
+  name = local.dev_secrets_name
 }

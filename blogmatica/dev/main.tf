@@ -8,7 +8,7 @@ locals {
   api_subdomain = "api.${local.project_name}"
   api_uri = "${local.api_subdomain}.${local.public_hosted_zone}"
   frontend_uri = "${local.project_name}.${local.public_hosted_zone}"
-  secrets_name = "${local.app_name}-${local.environment}"
+  secrets_name = data.terraform_remote_state.shared.outputs.dev_secrets_name
 }
 
 terraform {
