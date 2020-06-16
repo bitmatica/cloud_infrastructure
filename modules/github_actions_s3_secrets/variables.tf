@@ -22,3 +22,18 @@ variable "server_uri" {
   description = "Public URI that backend API will be hosted at"
   type = string
 }
+
+variable "terraform_github_repository_name" {
+  description = "Name of github repository with terraform infrastructure code"
+  type = string
+}
+
+variable "terraform_github_repository_org_name" {
+  description = "Name of github org with terraform infrastructure code"
+  type = string
+}
+
+variable "terraform_github_repository_version_path" {
+  description = "Path of config file with app version"
+  type = string
+}
