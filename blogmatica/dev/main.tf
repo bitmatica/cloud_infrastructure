@@ -3,7 +3,10 @@ locals {
   name = "blogmatica-${random_string.suffix.result}"
   environment = "dev"
   project_name = "${local.environment}-${local.name}"
-  api_uri = "api.${local.project_name}"
+  public_hosted_zone = "bitmatica.com"
+  api_subdomain = "api.${local.project_name}"
+  api_uri = "${local.api_subdomain}.${local.public_hosted_zone}"
+  frontend_uri = "${local.project_name}.${local.public_hosted_zone}"
 }
 
 terraform {
@@ -122,19 +125,19 @@ module "backend" {
 module "subdomain" {
   source = "../../modules/route53_subdomain"
   hostname = module.backend.service_host
-  subdomain = local.api_uri
+  subdomain = local.api_subdomain
 }
 
 module "backend_cert" {
   source = "../../modules/acm_certificate"
-  domain_name = "${local.api_uri}.bitmatica.com"
-  public_hosted_zone_domain_name = "bitmatica.com"
+  domain_name = local.api_uri
+  public_hosted_zone_domain_name = local.public_hosted_zone
 }
 
 module "frontend" {
   source = "../../modules/s3_static_site"
   bucket_name =  "${local.project_name}-frontend"
-  domain_name = "${local.project_name}.bitmatica.com"
-  public_hosted_zone_domain_name = "bitmatica.com"
+  domain_name = local.frontend_uri
+  public_hosted_zone_domain_name = local.public_hosted_zone
   frontend_version = local.frontend_version
 }
