@@ -8,7 +8,7 @@ locals {
 }
 
 data "aws_secretsmanager_secret" "secret" {
-  name = "${local.app_name}-github"
+  name = data.terraform_remote_state.shared.outputs.github_secrets_name
 }
 
 data "aws_secretsmanager_secret_version" "secrets_json" {
