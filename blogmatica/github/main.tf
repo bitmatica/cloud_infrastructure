@@ -7,6 +7,14 @@ locals {
   app_name = "blogmatica"
 }
 
+data "aws_secretsmanager_secret" "secret" {
+  name = "${local.app_name}-github"
+}
+
+data "aws_secretsmanager_secret_version" "secrets_json" {
+  secret_id = data.aws_secretsmanager_secret.secret.id
+}
+
 terraform {
   required_version = ">= 0.12.6"
   backend "s3" {
@@ -24,7 +32,7 @@ provider "aws" {
 }
 
 provider "github" {
-  token        = var.github_token
+  token        = jsondecode(data.aws_secretsmanager_secret_version.secrets_json.secret_string)["github_token"]
   organization = var.github_organization
 }
 

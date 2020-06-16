@@ -3,8 +3,3 @@ variable "github_organization" {
   type = string
   default = "bitmatica"
 }
-
-variable "github_token" {
-  description = "Token to manage github resources"
-  type = string
-}
