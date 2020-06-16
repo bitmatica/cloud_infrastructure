@@ -45,14 +45,8 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [aws_route53_record.cert_validation.fqdn]
 }
 
-resource "aws_s3_bucket" "bucket" {
+data "aws_s3_bucket" "bucket" {
   bucket = var.bucket_name
-  # Bucket is not publicly accessible - CloudFront is given access via origin access identity
-  acl    = "private"
-
-  tags = {
-    Name = var.bucket_name
-  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
@@ -65,7 +59,7 @@ locals {
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
+    domain_name = data.aws_s3_bucket.bucket.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
@@ -178,7 +172,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${data.aws_s3_bucket.bucket.arn}/*"]
 
     principals {
       type        = "AWS"
@@ -190,7 +184,7 @@ data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:ListBucket"]
     resources = [
-      aws_s3_bucket.bucket.arn]
+      data.aws_s3_bucket.bucket.arn]
 
     principals {
       type        = "AWS"
@@ -201,7 +195,7 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_s3_bucket_policy" "s3_bucket_policy" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket = data.aws_s3_bucket.bucket.id
   policy = data.aws_iam_policy_document.s3_policy.json
 }
 
