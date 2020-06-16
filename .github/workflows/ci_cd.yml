@@ -30,8 +30,8 @@ jobs:
         run: cd blogmatica/dev && terraform init
 
       - name: Terraform Plan
-        run: cd blogmatica/dev && env $(aws s3 cp $(cat secrets_path.txt) - | cat | xargs) terraform plan
+        run: cd blogmatica/dev && terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: cd blogmatica/dev && env $(aws s3 cp $(cat secrets_path.txt) - | cat | xargs) terraform apply -auto-approve
+        run: cd blogmatica/dev && terraform apply -auto-approve

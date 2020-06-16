@@ -1,12 +1,14 @@
 locals {
   region = "us-west-2"
-  name = "blogmatica-${random_string.suffix.result}"
+  app_name = "blogmatica"
+  name = "${local.app_name}-${random_string.suffix.result}"
   environment = "dev"
   project_name = "${local.environment}-${local.name}"
   public_hosted_zone = "bitmatica.com"
   api_subdomain = "api.${local.project_name}"
   api_uri = "${local.api_subdomain}.${local.public_hosted_zone}"
   frontend_uri = "${local.project_name}.${local.public_hosted_zone}"
+  secrets_name = "${local.app_name}-${local.environment}"
 }
 
 terraform {
@@ -99,6 +101,14 @@ provider "kubernetes" {
   version                = "~> 1.11.1"
 }
 
+data "aws_secretsmanager_secret" "secret" {
+  name = local.secrets_name
+}
+
+data "aws_secretsmanager_secret_version" "secrets_json" {
+  secret_id = data.aws_secretsmanager_secret.secret.id
+}
+
 module "backend" {
   source = "../../modules/k8s_backend_service"
   db_host = module.db_instance.db_instance_address
@@ -115,10 +125,10 @@ module "backend" {
   // Hack to ensure cluster is ready before creating k8s resources
   creation_depends_on = module.cluster.config_map_aws_auth
   acm_certificate_arn = module.backend_cert.acm_certificate_arn
-  plaid_client_id = var.plaid_client_id
-  plaid_env = var.plaid_env
-  plaid_public_key = var.plaid_public_key
-  plaid_secret = var.plaid_secret
+  plaid_client_id = jsondecode(data.aws_secretsmanager_secret_version.secrets_json.secret_string)["plaid_client_id"]
+  plaid_env = jsondecode(data.aws_secretsmanager_secret_version.secrets_json.secret_string)["plaid_env"]
+  plaid_public_key = jsondecode(data.aws_secretsmanager_secret_version.secrets_json.secret_string)["plaid_public_key"]
+  plaid_secret = jsondecode(data.aws_secretsmanager_secret_version.secrets_json.secret_string)["plaid_secret"]
   cluster_oidc_issuer_url = module.cluster.cluster_oidc_issuer_url
 }
 
