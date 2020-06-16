@@ -57,6 +57,7 @@ resource "random_string" "suffix" {
 resource "random_string" "db_name" {
   length = 16
   special = false
+  number = false
 }
 
 resource "random_string" "db_username" {

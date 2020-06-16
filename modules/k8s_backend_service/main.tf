@@ -109,11 +109,17 @@ resource "aws_kms_key" "kms_key" {
   description = "KMS key used to generate, encrypt and decrypt data keys"
 }
 
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+  upper = false
+}
+
 module "iam_assumable_role_admin" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version                       = "~> v2.6.0"
   create_role                   = true
-  role_name                     = "cluster-kms"
+  role_name                     = "cluster-kms-${random_string.suffix.result}"
   provider_url                  = replace(var.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.cluster_kms.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:${local.k8s_service_account_namespace}:${local.k8s_service_account_name}"]
