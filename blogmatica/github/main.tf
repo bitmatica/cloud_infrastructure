@@ -2,6 +2,8 @@ locals {
   region = "us-west-2"
   github_backend_repository_name = "nest-blogmatica"
   github_frontend_repository_name = "blogmatica-mst-apollo"
+  github_organization = "bitmatica"
+  github_terraform_repository_name = "cloud_infrastructure"
 }
 
 terraform {
@@ -44,6 +46,9 @@ module "github_actions_backend_cd_secrets" {
   aws_region = local.region
   ecr_repository_name = aws_ecr_repository.repository.name
   github_repository_name = local.github_backend_repository_name
+  terraform_github_repository_name = local.github_terraform_repository_name
+  terraform_github_repository_org_name = local.github_organization
+  terraform_github_repository_version_path = "blogmatica/dev/backend_version.txt"
 }
 
 module "github_actions_frontend_cd_secrets" {
@@ -54,4 +59,7 @@ module "github_actions_frontend_cd_secrets" {
   s3_bucket_name = data.terraform_remote_state.dev.outputs.frontend_s3_bucket_name
   // TODO This necessitates a FE build per env.  Look into alternatives
   server_uri = "https://${data.terraform_remote_state.dev.outputs.app_hostname}/graphql"
+  terraform_github_repository_name = local.github_terraform_repository_name
+  terraform_github_repository_org_name = local.github_organization
+  terraform_github_repository_version_path = "blogmatica/dev/frontend_version.txt"
 }

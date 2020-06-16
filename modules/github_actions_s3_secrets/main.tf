@@ -34,6 +34,30 @@ resource "github_actions_secret" "SERVER_URI" {
   plaintext_value  = var.server_uri
 }
 
+resource "github_actions_secret" "TERRAFORM_DEPLOY_KEY" {
+  repository       = var.github_repository_name
+  secret_name      = "TERRAFORM_DEPLOY_KEY"
+  plaintext_value  = tls_private_key.ssh_key.private_key_pem
+}
+
+resource "github_actions_secret" "TERRAFORM_REPO_NAME" {
+  repository       = var.github_repository_name
+  secret_name      = "TERRAFORM_REPO_NAME"
+  plaintext_value  = var.terraform_github_repository_name
+}
+
+resource "github_actions_secret" "TERRAFORM_REPO_ORG" {
+  repository       = var.github_repository_name
+  secret_name      = "TERRAFORM_REPO_ORG"
+  plaintext_value  = var.terraform_github_repository_org_name
+}
+
+resource "github_actions_secret" "TERRAFORM_REPO_VERSION_PATH" {
+  repository       = var.github_repository_name
+  secret_name      = "TERRAFORM_REPO_VERSION_PATH"
+  plaintext_value  = var.terraform_github_repository_version_path
+}
+
 resource "aws_iam_user" "github_actions_user" {
   name = "github-actions-${var.github_repository_name}"
 }
@@ -62,4 +86,16 @@ resource "aws_iam_user_policy" "github_actions_policy" {
     ]
 }
 EOF
+}
+
+
+resource "tls_private_key" "ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "github_repository_deploy_key" "deploy_key" {
+  key =        tls_private_key.ssh_key.public_key_openssh
+  repository = var.terraform_github_repository_name
+  title =      "github actions deploy key for updating ECR image"
+  read_only =  "false"
 }
