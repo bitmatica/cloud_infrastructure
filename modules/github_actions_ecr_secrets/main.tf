@@ -100,6 +100,6 @@ resource "tls_private_key" "ssh_key" {
 resource "github_repository_deploy_key" "deploy_key" {
   key =        tls_private_key.ssh_key.public_key_openssh
   repository = var.terraform_github_repository_name
-  title =      "github actions deploy key for updating ECR image"
+  title =      "github actions deploy key for updating ECR image via terraform repo"
   read_only = "false"
 }

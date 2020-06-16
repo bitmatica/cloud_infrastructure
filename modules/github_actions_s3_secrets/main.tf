@@ -19,19 +19,19 @@ resource "github_actions_secret" "AWS_REGION" {
 resource "github_actions_secret" "AWS_S3_BUCKET" {
   repository       = var.github_repository_name
   secret_name      = "AWS_S3_BUCKET"
-  plaintext_value  = var.s3_bucket_name
+  plaintext_value  = var.dev_s3_bucket_name
 }
 
 resource "github_actions_secret" "PUBLIC_URL" {
   repository       = var.github_repository_name
   secret_name      = "PUBLIC_URL"
-  plaintext_value  = var.public_url
+  plaintext_value  = var.dev_public_url
 }
 
 resource "github_actions_secret" "SERVER_URI" {
   repository       = var.github_repository_name
   secret_name      = "SERVER_URI"
-  plaintext_value  = var.server_uri
+  plaintext_value  = var.dev_server_uri
 }
 
 resource "github_actions_secret" "TERRAFORM_DEPLOY_KEY" {
@@ -55,7 +55,7 @@ resource "github_actions_secret" "TERRAFORM_REPO_ORG" {
 resource "github_actions_secret" "TERRAFORM_REPO_VERSION_PATH" {
   repository       = var.github_repository_name
   secret_name      = "TERRAFORM_REPO_VERSION_PATH"
-  plaintext_value  = var.terraform_github_repository_version_path
+  plaintext_value  = var.terraform_github_repository_dev_version_path
 }
 
 resource "aws_iam_user" "github_actions_user" {
@@ -80,14 +80,13 @@ resource "aws_iam_user_policy" "github_actions_policy" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.s3_bucket_name}/*"
+                "arn:aws:s3:::${var.dev_s3_bucket_name}/*"
             ]
         }
     ]
 }
 EOF
 }
-
 
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
@@ -96,6 +95,6 @@ resource "tls_private_key" "ssh_key" {
 resource "github_repository_deploy_key" "deploy_key" {
   key =        tls_private_key.ssh_key.public_key_openssh
   repository = var.terraform_github_repository_name
-  title =      "github actions deploy key for updating ECR image"
+  title =      "github actions deploy key for updating S3 buckets via terraform repo"
   read_only =  "false"
 }

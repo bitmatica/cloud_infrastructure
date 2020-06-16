@@ -1,8 +1,8 @@
 locals {
-  region = "us-west-2"
-  app_name = "blogmatica"
-  name = "${local.app_name}-${random_string.suffix.result}"
   environment = "dev"
+  app_name = data.terraform_remote_state.shared.outputs.app_name
+  aws_region = data.terraform_remote_state.shared.outputs.aws_region
+  name = "${local.app_name}-${random_string.suffix.result}"
   project_name = "${local.environment}-${local.name}"
   public_hosted_zone = "bitmatica.com"
   api_subdomain = "api.${local.project_name}"
@@ -22,9 +22,18 @@ terraform {
   }
 }
 
+data "terraform_remote_state" "shared" {
+  backend = "s3"
+  config = {
+    bucket = "bitmatica-terraform"
+    key    = "blogmatica/shared/terraform.tfstate"
+    region = "us-west-2"
+  }
+}
+
 provider "aws" {
   version = ">= 2.28.1"
-  region  = local.region
+  region  = local.aws_region
 }
 
 provider "random" {
@@ -146,7 +155,7 @@ module "backend_cert" {
 
 module "frontend" {
   source = "../../modules/s3_static_site"
-  bucket_name =  "${local.project_name}-frontend"
+  bucket_name =  data.terraform_remote_state.shared.outputs.dev_frontend_bucket_name
   domain_name = local.frontend_uri
   public_hosted_zone_domain_name = local.public_hosted_zone
   frontend_version = local.frontend_version
