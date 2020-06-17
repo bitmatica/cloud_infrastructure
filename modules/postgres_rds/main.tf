@@ -29,6 +29,7 @@ module "rds" {
 
   iam_database_authentication_enabled = true
   skip_final_snapshot = true
+  storage_encrypted = true
 
   vpc_security_group_ids = [aws_security_group.rds_security_group.id]
 
