@@ -78,7 +78,7 @@ module "network" {
 }
 
 module "cluster" {
-  source = "../../modules/autoscaling_eks"
+  source = "../../modules/eks"
   cluster_name = local.project_name
   vpc_id = module.network.vpc_id
   worker_node_subnet_ids = module.network.private_subnets
