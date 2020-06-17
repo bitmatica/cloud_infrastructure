@@ -1,5 +1,5 @@
 locals {
-  environment = "dev"
+  environment = "staging"
   app_name = data.terraform_remote_state.shared.outputs.app_name
   aws_region = data.terraform_remote_state.shared.outputs.aws_region
   name = "${local.app_name}-${random_string.suffix.result}"
@@ -8,14 +8,14 @@ locals {
   api_subdomain = "api.${local.environment}.${local.app_name}"
   api_uri = "${local.api_subdomain}.${local.public_hosted_zone}"
   frontend_uri = "${local.environment}.${local.app_name}.${local.public_hosted_zone}"
-  secrets_name = data.terraform_remote_state.shared.outputs.dev_secrets_name
+  secrets_name = data.terraform_remote_state.shared.outputs.staging_secrets_name
 }
 
 terraform {
   required_version = ">= 0.12.6"
   backend "s3" {
     bucket = "bitmatica-terraform"
-    key    = "blogmatica/dev/terraform.tfstate"
+    key    = "blogmatica/staging/terraform.tfstate"
     region = "us-west-2"
     dynamodb_table = "bitmatica-terraform-locks"
     encrypt        = true
@@ -103,7 +103,7 @@ module "db_instance" {
 }
 
 provider "kubernetes" {
-  alias = "blogmaticadev"
+  alias = "blogmaticastaging"
   host                   = module.cluster.cluster_endpoint
   cluster_ca_certificate = module.cluster.cluster_ca_certificate
   token                  = module.cluster.cluster_token
@@ -130,7 +130,7 @@ module "backend" {
   image = local.backend_image
   providers = {
     // Ensure cluster for this environment is used
-    kubernetes = kubernetes.blogmaticadev
+    kubernetes = kubernetes.blogmaticastaging
   }
   // Hack to ensure cluster is ready before creating k8s resources
   creation_depends_on = module.cluster.config_map_aws_auth
@@ -156,7 +156,7 @@ module "backend_cert" {
 
 module "frontend" {
   source = "../../modules/s3_static_site"
-  bucket_name =  data.terraform_remote_state.shared.outputs.dev_frontend_bucket_name
+  bucket_name =  data.terraform_remote_state.shared.outputs.staging_frontend_bucket_name
   domain_name = local.frontend_uri
   public_hosted_zone_domain_name = local.public_hosted_zone
   frontend_version = local.frontend_version

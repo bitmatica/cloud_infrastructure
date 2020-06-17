@@ -37,3 +37,18 @@ variable "terraform_github_repository_dev_version_path" {
   description = "Path of config file with dev app version"
   type = string
 }
+
+variable "staging_s3_bucket_name" {
+  description = "Name of s3 bucket to give github action IAM user push access to"
+  type = string
+}
+
+variable "staging_public_url" {
+  description = "Public URL that staging frontend bundle will be hosted at, such as the CloudFront CDN URL"
+  type = string
+}
+
+variable "staging_server_uri" {
+  description = "Public URI that staging backend API will be hosted at"
+  type = string
+}
