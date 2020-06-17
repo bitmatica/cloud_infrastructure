@@ -5,9 +5,9 @@ locals {
   name = "${local.app_name}-${random_string.suffix.result}"
   project_name = "${local.environment}-${local.name}"
   public_hosted_zone = "bitmatica.com"
-  api_subdomain = "api.${local.project_name}"
+  api_subdomain = "api.${local.environment}.${local.app_name}"
   api_uri = "${local.api_subdomain}.${local.public_hosted_zone}"
-  frontend_uri = "${local.project_name}.${local.public_hosted_zone}"
+  frontend_uri = "${local.environment}.${local.app_name}.${local.public_hosted_zone}"
   secrets_name = data.terraform_remote_state.shared.outputs.dev_secrets_name
 }
 
