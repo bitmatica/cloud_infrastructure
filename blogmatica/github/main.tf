@@ -45,6 +45,15 @@ data "terraform_remote_state" "dev" {
   }
 }
 
+data "terraform_remote_state" "staging" {
+  backend = "s3"
+  config = {
+    bucket = "bitmatica-terraform"
+    key    = "blogmatica/staging/terraform.tfstate"
+    region = "us-west-2"
+  }
+}
+
 data "terraform_remote_state" "shared" {
   backend = "s3"
   config = {
@@ -75,4 +84,7 @@ module "github_actions_frontend_cd_secrets" {
   terraform_github_repository_name = local.github_terraform_repository_name
   terraform_github_repository_org_name = local.github_organization
   terraform_github_repository_dev_version_path = "${local.app_name}/dev/frontend_version.txt"
+  staging_public_url = "https://${data.terraform_remote_state.staging.outputs.frontend_hostname}"
+  staging_s3_bucket_name = data.terraform_remote_state.staging.outputs.frontend_s3_bucket_name
+  staging_server_uri = "https://${data.terraform_remote_state.staging.outputs.app_hostname}/graphql"
 }
